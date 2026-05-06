@@ -8,6 +8,10 @@ require('dotenv').config();
 
 const app = express();
 
+app.get('/test-version', (req, res) => {
+    res.send('NEW VERSION 2026 WORKS');
+});
+
 app.use(cors());
 app.use(express.json());
 
