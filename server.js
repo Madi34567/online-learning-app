@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const path = require('path');
+const fs = require('fs');
 const pool = require('./db');
 require('dotenv').config();
 
@@ -13,10 +14,21 @@ app.use(express.json());
 // Отдаём файлы сайта из корня проекта
 app.use(express.static(__dirname));
 
+// Главная страница сайта
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    const indexPath = path.join(__dirname, 'index.html');
+
+    if (!fs.existsSync(indexPath)) {
+        return res.status(404).send('Файл index.html не найден в корне проекта');
+    }
+
+    res.sendFile(indexPath);
 });
 
+// Проверка API — открывать только /api/check
+app.get('/api/check', (req, res) => {
+    res.json({ message: 'API is running successfully!' });
+});
 
 app.post('/api/register', async (req, res) => {
     try {
@@ -246,6 +258,17 @@ app.get('/api/dashboard/:userId', async (req, res) => {
         console.error('Ошибка /api/dashboard/:userId:', error);
         res.status(500).json({ message: 'Ошибка получения аналитики' });
     }
+});
+
+// Если пользователь открыл любую не API-ссылку — показываем сайт
+app.get(/^\/(?!api).*/, (req, res) => {
+    const indexPath = path.join(__dirname, 'index.html');
+
+    if (!fs.existsSync(indexPath)) {
+        return res.status(404).send('Файл index.html не найден в корне проекта');
+    }
+
+    res.sendFile(indexPath);
 });
 
 const PORT = process.env.PORT || 3000;
