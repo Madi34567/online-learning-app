@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>EduTest — Онлайн-обучение и тестирование</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="brand">
+        <div class="brand-icon">📘</div>
+        <span>EduTest</span>
+    </div>
+
+    <nav class="nav">
+        <a href="#home" class="active">Главная</a>
+        <a href="#tests">Тесты</a>
+        <a href="#results">Результаты</a>
+        <a href="#about">О платформе</a>
+    </nav>
+
+    <div class="header-actions" id="guestActions">
+        <button class="btn ghost" onclick="openAuthModal('login')">Войти</button>
+        <button class="btn primary" onclick="openAuthModal('register')">Регистрация</button>
+    </div>
+
+    <div class="user-profile hidden" id="userProfile">
+        <div class="profile-circle" id="headerAvatar">S</div>
+        <div>
+            <strong id="headerUserName">Студент</strong>
+            <small>Личный кабинет</small>
+        </div>
+    </div>
+</header>
+
+<main>
+
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="badge">⭐ Учитесь. Тестируйтесь. Развивайтесь.</div>
+
+            <h1>Платформа онлайн-обучения и тестирования</h1>
+
+            <p>
+                Выбирайте интересующие тесты, проходите их онлайн
+                и отслеживайте свои результаты в личном кабинете.
+            </p>
+
+            <button class="btn big primary" onclick="scrollToBlock('tests')">
+                🚀 Выбрать тест
+            </button>
+        </div>
+
+        <div class="hero-dashboard">
+            <div class="dashboard-sidebar">
+                <div class="mini-logo">📘 EduTest</div>
+                <div class="side-item active" data-target="home">🏠 Обзор</div>
+                <div class="side-item" data-target="tests">🧪 Мои тесты</div>
+                <div class="side-item" data-target="results">📊 Результаты</div>
+                <div class="side-item" data-action="favorite">⭐ Избранное</div>
+                <div class="side-item" data-action="settings">⚙ Настройки</div>
+            </div>
+
+            <div class="dashboard-main">
+                <div class="dashboard-top">
+                    <div>
+                        <h3 id="helloName">Привет, студент! 👋</h3>
+                        <p>Продолжайте учиться и достигайте новых результатов.</p>
+                    </div>
+                    <div class="avatar" id="avatarLetter">S</div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span>Пройдено тестов</span>
+                        <strong id="completedTests">0</strong>
+                        <small>Всего</small>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Средний результат</span>
+                        <strong id="averageResult">0%</strong>
+                        <small>По всем тестам</small>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Лучший результат</span>
+                        <strong id="bestResult">0%</strong>
+                        <small>Максимальный балл</small>
+                    </div>
+                </div>
+
+                <div class="analytics-row">
+                    <div class="chart-card">
+                        <h4>Ваш прогресс по тестам</h4>
+                        <div class="progress-chart" id="progressChart"></div>
+                    </div>
+
+                    <div class="donut-card">
+                        <h4>Темы</h4>
+                        <div class="donut" id="donutChart"></div>
+                        <ul id="donutLegend">
+                            <li>Нет данных</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tests-section" id="tests">
+        <div class="section-title">
+            <div>
+                <span class="section-icon">📚</span>
+                <h2>Доступные тесты</h2>
+            </div>
+            <p>Выберите направление и пройдите тест из 20 вопросов.</p>
+        </div>
+
+        <div class="tests-grid" id="testsList"></div>
+    </section>
+
+    <section class="workspace">
+        <div class="test-panel" id="testPanel">
+            <div class="empty-test">
+                <h2>Выберите тест</h2>
+                <p>Нажмите кнопку “Пройти тест” на любой карточке выше.</p>
+            </div>
+        </div>
+
+        <aside class="results-panel" id="results">
+            <div class="panel-header">
+                <h2>Мои результаты</h2>
+                <button class="link-btn" onclick="loadResults()">Обновить →</button>
+            </div>
+
+            <div class="results-list" id="resultsList">
+                <p class="muted">Войдите в аккаунт, чтобы увидеть результаты.</p>
+            </div>
+        </aside>
+    </section>
+
+    <section class="about" id="about">
+        <h2>О платформе</h2>
+        <p>
+            EduTest — это веб-приложение для онлайн-обучения и проверки знаний.
+            Пользователь может зарегистрироваться, выбрать тест, ответить на вопросы,
+            получить результат и отслеживать статистику прохождения.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    <div class="brand footer-brand">
+        <div class="brand-icon">📘</div>
+        <span>EduTest</span>
+    </div>
+    <p>© 2026 EduTest. Веб-приложение для онлайн-обучения с системой тестирования.</p>
+</footer>
+
+<div class="modal-overlay hidden" id="authModal">
+    <div class="auth-modal">
+        <button class="modal-close" onclick="closeAuthModal()">×</button>
+
+        <div class="modal-tabs">
+            <button id="loginTab" onclick="switchAuthMode('login')">Вход</button>
+            <button id="registerTab" onclick="switchAuthMode('register')">Регистрация</button>
+        </div>
+
+        <div class="modal-form" id="loginForm">
+            <h2>Вход в аккаунт</h2>
+            <p>Введите данные, чтобы продолжить обучение.</p>
+
+            <input type="email" id="loginEmail" placeholder="Email">
+            <input type="password" id="loginPassword" placeholder="Пароль">
+
+            <button class="btn primary full" onclick="loginUser()">Войти</button>
+            <div class="message" id="loginMessage"></div>
+        </div>
+
+        <div class="modal-form hidden" id="registerForm">
+            <h2>Регистрация</h2>
+            <p>Создайте аккаунт, чтобы сохранять результаты тестирования.</p>
+
+            <input type="text" id="regName" placeholder="ФИО">
+            <input type="email" id="regEmail" placeholder="Email">
+            <input type="password" id="regPassword" placeholder="Пароль">
+
+            <button class="btn primary full" onclick="registerUser()">Зарегистрироваться</button>
+            <div class="message" id="registerMessage"></div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
