@@ -17,9 +17,6 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.get('/api/check', (req, res) => {
-    res.json({ message: 'API is running successfully!' });
-});
 
 app.post('/api/register', async (req, res) => {
     try {
