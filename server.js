@@ -10,20 +10,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Отдаём сайт из папки public
-app.use(express.static(path.join(__dirname, 'public')));
+// Отдаём файлы сайта из корня проекта
+app.use(express.static(__dirname));
 
-// Главная страница сайта
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Проверка API
 app.get('/api/check', (req, res) => {
     res.json({ message: 'API is running successfully!' });
 });
 
-// Регистрация
 app.post('/api/register', async (req, res) => {
     try {
         const { full_name, email, password } = req.body;
@@ -58,7 +55,6 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-// Вход
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -93,7 +89,6 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-// Получить все тесты
 app.get('/api/tests', async (req, res) => {
     try {
         const tests = await pool.query(`
@@ -117,7 +112,6 @@ app.get('/api/tests', async (req, res) => {
     }
 });
 
-// Получить один тест
 app.get('/api/test/:id', async (req, res) => {
     try {
         const testId = req.params.id;
@@ -167,7 +161,6 @@ app.get('/api/test/:id', async (req, res) => {
     }
 });
 
-// Отправка результата теста
 app.post('/api/submit-test', async (req, res) => {
     try {
         const { user_id, test_id, answers } = req.body;
@@ -209,7 +202,6 @@ app.post('/api/submit-test', async (req, res) => {
     }
 });
 
-// Результаты пользователя
 app.get('/api/results/:userId', async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -237,7 +229,6 @@ app.get('/api/results/:userId', async (req, res) => {
     }
 });
 
-// Аналитика пользователя
 app.get('/api/dashboard/:userId', async (req, res) => {
     try {
         const userId = req.params.userId;
@@ -251,24 +242,8 @@ app.get('/api/dashboard/:userId', async (req, res) => {
             WHERE user_id = $1
         `, [userId]);
 
-        const recentResults = await pool.query(`
-            SELECT 
-                results.id,
-                results.percentage,
-                results.created_at,
-                tests.title AS test_title,
-                courses.title AS course_title
-            FROM results
-            JOIN tests ON results.test_id = tests.id
-            JOIN courses ON tests.course_id = courses.id
-            WHERE results.user_id = $1
-            ORDER BY results.created_at DESC
-            LIMIT 5
-        `, [userId]);
-
         res.json({
-            stats: stats.rows[0],
-            recentResults: recentResults.rows
+            stats: stats.rows[0]
         });
     } catch (error) {
         console.error('Ошибка /api/dashboard/:userId:', error);
