@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
+const path = require('path');
 const pool = require('./db');
 require('dotenv').config();
 
@@ -8,10 +9,17 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+
+// Отдаём frontend из папки public
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Главная страница сайта
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.get('/api/check', (req, res) => {
-    res.json({ message: 'Сервер работает' });
+    res.json({ message: 'API is running successfully!' });
 });
 
 app.post('/api/register', async (req, res) => {
@@ -263,5 +271,5 @@ app.get('/api/dashboard/:userId', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Сервер запущен: http://localhost:${PORT}`);
+    console.log(`Сервер запущен на порту ${PORT}`);
 });
